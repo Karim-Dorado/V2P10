@@ -3,6 +3,7 @@ from .models import Contributor
 from projects.models import Project
 from rest_framework import serializers
 from users.models import User
+from projects.serializers import ProjectSerializer
 
 
 class ContributorSerializer(ModelSerializer):
@@ -10,13 +11,8 @@ class ContributorSerializer(ModelSerializer):
         queryset=User.objects.all(),
         slug_field='username',
     )
-
-    project = serializers.SlugRelatedField(
-        queryset=Project.objects.all(),
-        slug_field='title',
-    )
-
-
+    project = ProjectSerializer(read_only=True)
+    
     class Meta(object):
         model = Contributor
         fields = ('id',
@@ -31,5 +27,6 @@ class ContributorSerializer(ModelSerializer):
             user=validated_data["user"],
             project=projet
         )
+        
         contributor.save()
         return contributor

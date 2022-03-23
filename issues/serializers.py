@@ -1,11 +1,21 @@
 from rest_framework import serializers
 from .models import Issue
 from projects.models import Project
+from users.models import User
+from users.serializers import UserSerializer
+from projects.serializers import ProjectSerializer
+from contributors.models import Contributor
+from contributors.serializers import ContributorSerializer
 
 
-class IssueSerializer(serializers.ModelSerializer):
+class IssueDetailSerializer(serializers.ModelSerializer):
     issue_comment = serializers.StringRelatedField(many=True)
-
+    project = ProjectSerializer(read_only=True)
+    assignee = serializers.SlugRelatedField(
+        queryset=User.objects.all(),
+        slug_field='username',
+    )
+    author = UserSerializer(read_only=True)
     class Meta:
         model = Issue
         fields = ['id',
@@ -30,14 +40,18 @@ class IssueSerializer(serializers.ModelSerializer):
         assignee = self.context.get("request", None).user
 
         # assignee = Contributor.objects.filter(user=author.pk)
-        projet = Project.objects.get(pk=self.context.get("view").kwargs["project_pk"])
+        project = Project.objects.get(pk=self.context.get("view").kwargs["project_pk"])
+        
+        """ contributors = Contributor.objects.filter(project=project.pk)
+        for contrib in contributors:
+            print(contrib.user) """
 
         issue = Issue.objects.create(
             title=validated_data["title"],
             desc=validated_data["desc"],
             tag=validated_data["tag"],
             priority=validated_data["priority"],
-            project=projet,
+            project=project,
             status=validated_data["status"],
             author=author,
             assignee=assignee
@@ -47,3 +61,11 @@ class IssueSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
+class IssueSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Issue
+        fields = ['id',
+                  'title',
+                  ]

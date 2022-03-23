@@ -1,36 +1,27 @@
-from rest_framework.serializers import ModelSerializer
-from .models import Project
 from rest_framework import serializers
-from users.models import User
-from issues.models import Issue
+from .models import Project
+from users.serializers import UserSerializer
 
 
-class ProjectSerializer(ModelSerializer):
-    author = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
-        slug_field='username',
-    )
+class ProjectDetailSerializer(serializers.ModelSerializer):
     project_contributor = serializers.StringRelatedField(many=True)
-    issue_related = serializers.SlugRelatedField(
-        queryset=Issue.objects.all(),
-        slug_field='title',
-        many=True
-    )
+    issue_related = serializers.StringRelatedField(many=True)
+    author = UserSerializer(read_only=True)
     class Meta:
+
         model = Project
-        fields = [
-            'id',
-            'title',
-            'description',
-            'type',
-            'author',
-            'issue_related',
-            'project_contributor',
-            ]
+        fields = ['id',
+                  'title',
+                  'description',
+                  'type',
+                  'author',
+                  'issue_related',
+                  'project_contributor',
+                  ]
         read_only_fields = ("author",)
-    
+
     def create(self, validated_data):
-        author = self.context['request'].user  # récupère le token
+        author = self.context.get("request", None).user
 
         project = Project.objects.create(
             title=validated_data["title"],
@@ -41,3 +32,12 @@ class ProjectSerializer(ModelSerializer):
         project.save()
 
         return project
+
+class ProjectSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+
+        model = Project
+        fields = ['id',
+                  'title',
+                  ]

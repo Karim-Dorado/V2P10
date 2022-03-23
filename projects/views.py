@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .models import Project
-from .serializers import ProjectSerializer
+from .serializers import ProjectDetailSerializer
 from contributors.models import Contributor
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthorOrReadOnly
@@ -12,8 +12,8 @@ from .permissions import IsAuthorOrReadOnly
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated,]
+    serializer_class = ProjectDetailSerializer
+    permission_classes = [IsAuthenticated,IsAuthorOrReadOnly]
 
 
     def get_queryset(self):
