@@ -3,10 +3,12 @@ from .models import Comment
 from issues.models import Issue
 from users.serializers import UserSerializer
 from issues.serializers import IssueSerializer
-from projects.models import Project
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentDetailSerializer(serializers.ModelSerializer):
+    """
+    Detail serializer of a comment model.
+    """
     author = UserSerializer(read_only=True)
 
     issue = IssueSerializer(read_only=True)
@@ -20,17 +22,26 @@ class CommentSerializer(serializers.ModelSerializer):
                   'created_time'
                   ]
 
-    
     def create(self, validated_data):
         author = self.context.get("request", None).user  # récupère le token
-        project = Project.objects.get(pk=self.context.get("view").kwargs["project_pk"])
         issue = Issue.objects.get(pk=self.context.get("view").kwargs["issue_pk"])
-
         comment = Comment.objects.create(
             description=validated_data["description"],
             author=author,
             issue=issue
         )
         comment.save()
-
         return comment
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """
+    List serializer of a comment model.
+    """
+    author = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id',
+                  'author',
+                  ]

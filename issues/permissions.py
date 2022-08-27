@@ -1,13 +1,11 @@
 from rest_framework import permissions
 
-# Seuls les contributeurs sont autorisés à créer ou à consulter les problèmes
-# d'un projet.
-
-# En outre, ils ne peuvent les actualiser (Update) et les supprimer (Delete)
-# que s'ils en sont les auteurs.
-
 
 class IsIssueAuthorOrReadOnly(permissions.BasePermission):
+    """
+    This permission checks if the user is the issue author.
+    Only the author can update or delete an issue.
+    """
     message = "Seul l'auteur du problème peut le modifier ou le supprimer"
 
     def has_object_permission(self, request, view,  obj):

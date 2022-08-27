@@ -13,7 +13,11 @@ PERMISSION = (
     ('contributor', 'Contributor'),
 )
 
+
 class Contributor(models.Model):
+    """
+    Model that represents a project contributor.
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
                              related_name='user_contributor')

@@ -1,24 +1,25 @@
 from rest_framework import viewsets
-from .serializers import IssueSerializer
+from .serializers import IssueDetailSerializer, IssueSerializer
 from .permissions import IsIssueAuthorOrReadOnly
 from rest_framework.permissions import IsAuthenticated
-from projects.models import Project
-
-# l'utilisateur ne doit pouvoir appliquer le processus CRUD aux problèmes
-# du projet que si il ou elle figure sur la liste des contributeurs.
-
-# Seuls les contributeurs sont autorisés à créer ou à consulter
-# les problèmes d'un projet.
+from .models import Issue
 
 
 class IssueViewSet(viewsets.ModelViewSet):
-    serializer_class = IssueSerializer
+    """
+    A viewset for viewing and editing issues instances.
+    An issue should only be accessible to the author and contributors.
+    Only the author of the issue can update or delete it.
+    """
+    serializer_class = IssueDetailSerializer
     permission_classes = [IsAuthenticated, IsIssueAuthorOrReadOnly]
 
     def get_queryset(self):
-        project_id = self.kwargs['project_pk']
-        project = (Project.objects.filter(pk=project_id,
-                                          project_contributor__user=self.request.user)
-                   | Project.objects.filter(pk=project_id, author=self.request.user))
+        return Issue.objects.filter(project=self.kwargs['project_pk'])
 
-        return project[0].issue_related
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return IssueSerializer
+        if self.action == 'retrieve':
+            return IssueDetailSerializer
+        return IssueDetailSerializer

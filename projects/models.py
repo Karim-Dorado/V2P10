@@ -11,6 +11,10 @@ TYPE = [
 
 
 class Project(models.Model):
+    """
+    Model that represents the model of a project.
+    """
+
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=255, blank=True)
     type = models.CharField(choices=TYPE, max_length=7)
@@ -18,5 +22,6 @@ class Project(models.Model):
                                on_delete=models.CASCADE,
                                related_name='author'
                                )
+
     def __str__(self):
         return self.title

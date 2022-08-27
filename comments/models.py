@@ -4,6 +4,9 @@ from django.conf import settings
 
 
 class Comment(models.Model):
+    """
+    Model that represents a comment.
+    """
     description = models.CharField(max_length=128, blank=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.RESTRICT,

@@ -4,11 +4,12 @@ from projects.models import Project
 from users.models import User
 from users.serializers import UserSerializer
 from projects.serializers import ProjectSerializer
-from contributors.models import Contributor
-from contributors.serializers import ContributorSerializer
 
 
 class IssueDetailSerializer(serializers.ModelSerializer):
+    """
+    Detail serializer of an issue model.
+    """
     issue_comment = serializers.StringRelatedField(many=True)
     project = ProjectSerializer(read_only=True)
     assignee = serializers.SlugRelatedField(
@@ -16,6 +17,7 @@ class IssueDetailSerializer(serializers.ModelSerializer):
         slug_field='username',
     )
     author = UserSerializer(read_only=True)
+
     class Meta:
         model = Issue
         fields = ['id',
@@ -41,10 +43,6 @@ class IssueDetailSerializer(serializers.ModelSerializer):
 
         # assignee = Contributor.objects.filter(user=author.pk)
         project = Project.objects.get(pk=self.context.get("view").kwargs["project_pk"])
-        
-        """ contributors = Contributor.objects.filter(project=project.pk)
-        for contrib in contributors:
-            print(contrib.user) """
 
         issue = Issue.objects.create(
             title=validated_data["title"],
@@ -62,8 +60,11 @@ class IssueDetailSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
 
+
 class IssueSerializer(serializers.ModelSerializer):
-    
+    """
+    List serializer of an issue model.
+    """
     class Meta:
         model = Issue
         fields = ['id',

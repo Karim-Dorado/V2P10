@@ -21,7 +21,11 @@ STATUT = [
     ('d', 'Done')
     ]
 
+
 class Issue(models.Model):
+    """
+    Model that represents an issue.
+    """
     title = models.CharField(max_length=128, blank=False)
     desc = models.CharField(max_length=128)
     tag = models.CharField(max_length=12, choices=TAG)
