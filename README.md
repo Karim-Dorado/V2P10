@@ -11,7 +11,7 @@ L'API doit respecter les directives suivantes :
  - L'accès global à l'API requiert une authentification.
  - Le créateur d'un projet est le seul à pouvoir effacer ou mettre à jours son projet, il est donc le seul à pouvoir ajouter des contributeurs.
  - Les contributeurs d'un projet n'ont qu'un accès en lecture à celui-ci, ils peuvent cependant créer des problèmes.
- - Les problèmes suivent la même logique que les projets, seul les créateurs peuvent les mettre à jours ou les effacer.
+ - Les problèmes suivent la même logique que les projets, seuls les créateurs peuvent les mettre à jours ou les effacer.
  - Les problèmes peuvent être commentés.
 
 
