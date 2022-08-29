@@ -43,8 +43,6 @@ Sous Windows :
     $ cd softdesk/
     $ py manage.py runserver
 
-Le site sera accessible via l'adresse local : 127.0.0.1:8000
-
 Pour lancer le serveur, puis entrez l'adresse suivante dans le navigateur : http:/127.0.0.1:8000/login/
 
 Afin de tester les différentes fonctionnalités du site, différents utilisateurs sont déjà enregistrés : 
