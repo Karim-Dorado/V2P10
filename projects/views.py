@@ -17,8 +17,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         contributors = Contributor.objects.filter(user=self.request.user)
 
-        return (Project.objects.filter(author=self.request.user)
-                | Project.objects.filter(project_contributor__in=contributors)).distinct()
+        return (Project.objects.filter(project_contributor__in=contributors)).distinct()
 
     def get_serializer_class(self):
         if self.action == 'list':
