@@ -6,7 +6,7 @@ class IsIssueAuthorOrReadOnly(permissions.BasePermission):
     This permission checks if the user is the issue author.
     Only the author can update or delete an issue.
     """
-    message = "Seul l'auteur du problème peut le modifier ou le supprimer"
+    message = "Only the author can update or delete this issue"
 
     def has_object_permission(self, request, view,  obj):
 

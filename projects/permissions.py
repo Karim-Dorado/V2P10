@@ -5,7 +5,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     """
     This permission checks if the user is the project author.
     """
-    message = "Seul un auteur ou contributeur du projet peut effectuer des opérations"
+    message = "Only the author can update or delete a project"
 
     def has_object_permission(self, request, view,  obj):
 

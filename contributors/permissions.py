@@ -6,7 +6,7 @@ class IsProjectContributor(permissions.BasePermission):
     This permission checks if the user is a project contributor.
     Only a contributor can read a project and hi
     """
-    message = "Seul un contributeur du problème peut modifier ou supprimer"
+    message = "Only a contributor can read a project"
 
     def has_object_permission(self, request, view,  obj):
 
