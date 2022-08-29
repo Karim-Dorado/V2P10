@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from contributors.models import Contributor
 from .models import Issue
 from projects.models import Project
 from users.models import User
@@ -35,14 +36,17 @@ class IssueDetailSerializer(serializers.ModelSerializer):
         read_only_fields = ['author', 'project', 'created_time', ]
 
     def create(self, validated_data):
-        # récupère le token
         author = self.context.get("request", None).user
-
-        # assigne l'auteur du problème en assigné par defaut
-        assignee = self.context.get("request", None).user
-
-        # assignee = Contributor.objects.filter(user=author.pk)
         project = Project.objects.get(pk=self.context.get("view").kwargs["project_pk"])
+
+        # check if the assignee is a contributor, else return the author as an assignee
+        assignee = User.objects.get(username=self._kwargs['data']['assignee'])
+        contributors = Contributor.objects.filter(project=project.pk)
+        lc = []
+        for cont in contributors:
+            lc.append(cont.user)
+        if assignee not in lc:
+            assignee = self.context.get("request", None).user
 
         issue = Issue.objects.create(
             title=validated_data["title"],
