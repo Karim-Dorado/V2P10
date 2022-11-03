@@ -4,7 +4,7 @@
 
 Projet consistant à créer une application permettant de remonter et suivre des problèmes techniques pour la société SoftDesk.
 
-La conception de cette API doit Restfull est réalisée via Django Rest Framework.
+La conception de cette API Restfull est réalisée via Django Rest Framework.
 
 L'API doit respecter les directives suivantes :
  - L'utilisateur doit pouvoir créer un compte et se connecter.
